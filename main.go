@@ -19,6 +19,10 @@ func ensurePort(defaultPort uint16) string {
 	return strconv.FormatUint(uint64(defaultPort), 10)
 }
 
+func getStack() string {
+	return os.Getenv("STACK")
+}
+
 func main() {
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		if isHTTPS(req) {
@@ -30,7 +34,8 @@ func main() {
 	})
 
 	port := ensurePort(6666)
-	log.Printf("Listen on port %s\n", port)
+	stack := getStack()
+	log.Printf("Stack %q, listening on port %s\n", stack, port)
 
 	log.Fatalln(http.ListenAndServe(":"+port, nil))
 }
